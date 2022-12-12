@@ -25,7 +25,7 @@ c = torch.randn((), device=device, dtype=dtype)
 d = torch.randn((), device=device, dtype=dtype)
 
 learning_rate = 1e-6
-for t in range(200000):
+for t in range(10000):
     # Forward pass: compute predicted y
     y_pred = a + b * x + c * x ** 2 + d * x ** 3
 
