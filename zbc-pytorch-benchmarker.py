@@ -46,14 +46,16 @@ input_data = torch.randn(1, 3, 224, 224)
 # Move the input data to the GPU
 input_data = input_data.cuda()
 
+# Import the tqdm module
+from tqdm import tqdm
+
 # Run the benchmark multiple times and average the elapsed time
 print("Run the benchmark multiple times and average the elapsed time")
 num_runs = 200000
 total_time = 0
-for i in range(num_runs):
-    # Print the current iteration number
-    #print("Iteration:", i)
 
+# Use the tqdm function to wrap the range object
+for i in tqdm(range(num_runs)):
     # Start the timer
     start_time = time.time()
 
@@ -65,9 +67,6 @@ for i in range(num_runs):
 
     # Calculate the elapsed time
     elapsed_time = end_time - start_time
-
-    # Print the elapsed time
-    #print("Elapsed time:", elapsed_time)
 
     # Update the total time
     total_time += elapsed_time
