@@ -1,53 +1,76 @@
-# -*- coding: utf-8 -*-
-
 import torch
-import math
+import torch.nn as nn
 import time
 
+# Define a PyTorch model
+class SimpleConvNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+        self.relu1 = nn.ReLU()
+        self.conv2 = nn.Conv2d(16, 32, kernel_size=3, padding=1)
+        self.relu2 = nn.ReLU()
+# Print the values of the conv1 and conv2 attributes
+        print("conv1:", self.conv1)
+        print("conv2:", self.conv2)
 
-startTime = time.time()
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.relu1(x)
+        x = self.conv2(x)
+        x = self.relu2(x)
+        return x
 
+# Instantiate the model
+print("Instantiate the model")
+model = SimpleConvNet()
 
-dtype = torch.float
+# Move the model to the GPU
+model.cuda()
 
+# Save the model to a file
+print("Save the model to a file")
+torch.save(model, "model.pt")
 
-#device = torch.device("cpu")
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# Load a PyTorch model
+print("Load a PyTorch model")
+model = torch.load("model.pt")
 
-# Create random input and output data
-x = torch.linspace(-math.pi, math.pi, 2000, device=device, dtype=dtype)
-y = torch.sin(x)
+# Move the model to the GPU
+model.cuda()
 
-# Randomly initialize weights
-a = torch.randn((), device=device, dtype=dtype)
-b = torch.randn((), device=device, dtype=dtype)
-c = torch.randn((), device=device, dtype=dtype)
-d = torch.randn((), device=device, dtype=dtype)
+# Generate some input data for the modelDataParallel to run the model on multiple GPUs
+print("Generate some input data for the modelDataParallel to run the model on multiple GPUs")
+input_data = torch.randn(1, 3, 224, 224)
 
-learning_rate = 1e-6
-for t in range(10000):
-    # Forward pass: compute predicted y
-    y_pred = a + b * x + c * x ** 2 + d * x ** 3
+# Move the input data to the GPU
+input_data = input_data.cuda()
 
-    # Compute and print loss
-    loss = (y_pred - y).pow(2).sum().item()
-    if t % 100 == 99:
-        print(t, loss)
+# Run the benchmark multiple times and average the elapsed time
+print("Run the benchmark multiple times and average the elapsed time")
+num_runs = 200000
+total_time = 0
+for i in range(num_runs):
+    # Print the current iteration number
+    #print("Iteration:", i)
 
-    # Backprop to compute gradients of a, b, c, d with respect to loss
-    grad_y_pred = 2.0 * (y_pred - y)
-    grad_a = grad_y_pred.sum()
-    grad_b = (grad_y_pred * x).sum()
-    grad_c = (grad_y_pred * x ** 2).sum()
-    grad_d = (grad_y_pred * x ** 3).sum()
+    # Start the timer
+    start_time = time.time()
 
-    # Update weights using gradient descent
-    a -= learning_rate * grad_a
-    b -= learning_rate * grad_b
-    c -= learning_rate * grad_c
-    d -= learning_rate * grad_d
+    # Run the model on the input data
+    output = model(input_data)
 
+    # Stop the timer
+    end_time = time.time()
 
-print(f'Result: y = {a.item()} + {b.item()} x + {c.item()} x^2 + {d.item()} x^3')
-executionTime = (time.time() - startTime)
-print('Execution time in seconds: ' + str(executionTime))
+    # Calculate the elapsed time
+    elapsed_time = end_time - start_time
+
+    # Print the elapsed time
+    #print("Elapsed time:", elapsed_time)
+
+    # Update the total time
+    total_time += elapsed_time
+
+# Print the average elapsed time
+print("Average elapsed time:", total_time / num_runs)
