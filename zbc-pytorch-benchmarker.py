@@ -25,6 +25,9 @@ class SimpleConvNet(nn.Module):
 print("Instantiate the model")
 model = SimpleConvNet()
 
+# Wrap the model in a DataParallel wrapper to support multiple GPUs
+model = nn.DataParallel(model)
+
 # Move the model to the GPU
 model.cuda()
 
