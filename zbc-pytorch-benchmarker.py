@@ -54,7 +54,7 @@ from tqdm import tqdm
 
 # Run the benchmark multiple times and average the elapsed time
 print("Run the benchmark multiple times and average the elapsed time")
-num_runs = 200000
+num_runs = 100000
 total_time = 0
 
 # Use the tqdm function to wrap the range object
