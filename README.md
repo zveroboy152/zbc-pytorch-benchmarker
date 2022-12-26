@@ -1,6 +1,18 @@
 ## zbc-pytorch-benchmarker
 This repo contains the code to benchmark and compare pytorch calcuation  runs.  This was created with OpenAI, and is a working example of what OpenAI can do.
 
+
+## Prerequisites:
+
+To run this script, you will need to have the following packages installed:
+
+PyTorch: You can install PyTorch by following the instructions on the PyTorch website. Make sure to install the correct version for your system (e.g., CPU-only, CUDA-enabled).
+
+tqdm: You can install tqdm by running pip install tqdm in your terminal.
+
+Note: You may also need to have a CUDA-compatible GPU and the relevant drivers installed in order to run the script. If you do not have a CUDA GPU, you can still run the script by commenting out the lines that move the model and input data to the GPU.
+
+
 ## What does this code do?
 
 The script begins by importing the necessary modules, including the torch module for defining and training neural networks, and the torch.nn module, which provides classes for defining and building neural network architectures. The script then defines a PyTorch model named "SimpleConvNet" that extends the nn.Module class and overrides its __init__ and forward methods.
